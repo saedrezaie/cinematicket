@@ -14,21 +14,21 @@ use Illuminate\Support\Facades\DB;
 class CityController extends BaseApiController
 {
 
-    public function index(Request $request): JsonResponse
+    public function index(Request $request)
     {
-        $users = DB::table('cities')
-            ->join('cinemas', 'section.id', '=', 'cinemas.section_id')
-            ->join('sections', 'ticket.id', '=', 'sections.ticket_id')
-            ->select('cinemas.*', 'cities.name', 'orders.price')
-            ->get();
-        $cities = City::with(["cinemas", "tickets"])->get();
-        return $this->successResponse(
-            CityResource::collection($cities),
-            trans("City.index_message"),
-            201
-        );
+        if (isset($request['ticket_max'])) {
+            $cities = City::join('cinemas', 'cities.id', '=', 'cinemas.city_id')
+                ->join('sections', 'cinemas.id', '=', 'sections.cinema_id')
+                ->join('tickets', 'sections.id', '=', 'tickets.section_id')
+                ->select('cities.name')
+                ->selectRaw('COUNT(tickets.id) as count_ticket')
+                ->groupBy('cities.id', 'cities.name')
+                ->orderByDesc('count_ticket')
+                ->limit(1)
+                ->get();
+        } else $cities = City::all();
+        return $cities;
     }
-
 
     public function store(StoreCityRequest $request, City $city): JsonResponse
     {
