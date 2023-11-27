@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class BaseApiController extends Controller
 {
+
     public function successResponse($data, $message = '', $code = 200): JsonResponse
     {
         return response()->json([
