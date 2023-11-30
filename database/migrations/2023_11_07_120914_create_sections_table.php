@@ -17,6 +17,7 @@ return new class extends Migration
             $table->time('from');
             $table->foreignId("cinema_id")->constrained("cinemas")->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId("movie_id")->constrained("movies")->cascadeOnDelete()->cascadeOnUpdate();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

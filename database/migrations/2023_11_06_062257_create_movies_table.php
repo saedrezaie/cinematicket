@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('minute');
             $table->foreignId("category_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

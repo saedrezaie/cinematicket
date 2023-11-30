@@ -27,10 +27,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-route::post('/login', [AuthController::class, 'login']);
-route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-route::post('/register', [AuthController::class, 'register'])->middleware('auth:sanctum');
-
+route::post('/login', [AuthController::class, 'login'])->name("login");
+route::Post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum')->name("logout");
+route::post('/register', [AuthController::class, 'register'])->name("register");
 Route::post('/RoleToUser', [RoleController::class, "RoleToUser"]);
 Route::post('/detach', [RoleController::class, "Detach"]);
 
@@ -44,3 +43,5 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::apiresource('/user', UserController::class);
     Route::apiResource('/section' , SectionController::class);
 });
+
+Route::get("user/restore/{user}" , [UserController::class , 'restore'])->withTrashed();

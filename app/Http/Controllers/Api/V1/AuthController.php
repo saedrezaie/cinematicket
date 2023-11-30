@@ -9,14 +9,15 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends BaseApiController
 {
     public function register(RegisterRequest $request): JsonResponse
     {
-        $users = User::create($request->validated());
+        $user = User::create($request->validated());
         return $this->successResponse(
-            UserResource::make($users),
+            UserResource::make($user),
             trans('User.success_store'),
             201
         );
@@ -24,7 +25,7 @@ class AuthController extends BaseApiController
 
     public function login(LoginRequest $request)
     {
-        if (Auth::attempt(['name' => $request['name'], 'password' => $request['password']])) {
+        if (Auth::attempt(['email' => $request['email'], 'password' => $request['password']])) {
             $user = Auth::user();
             $success['token'] = $user->createToken('CentralHell')->plainTextToken;
             $success['user'] = UserResource::make($user->load('roles'));
@@ -32,14 +33,18 @@ class AuthController extends BaseApiController
                 $success,
                 trans('User.success_login'),
                 201);
-        } else return 'Unauthorised';
+        } else {
+            return 'Unauthorised';
+        }
     }
 
-    public function logout(): JsonResponse
+    public
+    function logout()
     {
-        Auth::user()->tokens()->delete();
-        return response()->json([
-            'message' => 'Successfully logged out',
-        ]);
+        if (auth()->user()->currentAccessToken()->delete()) {
+            return response()->json([
+                'message' => 'Successfully logged out',
+            ]);
+        }else return "warning!";
     }
 }

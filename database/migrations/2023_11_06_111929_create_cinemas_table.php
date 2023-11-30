@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string("address")->unique();
             $table->boolean("capacity")->default(true);
             $table->foreignId("city_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

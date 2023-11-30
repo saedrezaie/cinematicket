@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId("user_id")->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId("section_id")->constrained('sections')->cascadeOnDelete()->cascadeOnUpdate();
             $table->integer("salon");
+            $table->softDeletes();
             $table->timestamps();
         });
     }
