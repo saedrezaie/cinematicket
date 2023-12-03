@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('cinemas', function (Blueprint $table) {
             $table->id();
+            $table->uuid()->unique()->index();
             $table->string("name")->unique();
             $table->string("phone");
             $table->string("address")->unique();

@@ -7,9 +7,11 @@ use App\Http\Requests\StoreCityRequest;
 use App\Http\Requests\UpdateCityRequest;
 use App\Http\Resources\CityResource;
 use App\Models\City;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class CityController extends BaseApiController
 {
@@ -26,7 +28,7 @@ class CityController extends BaseApiController
                 ->orderByDesc('count_ticket')
                 ->limit(1)
                 ->get();
-        } else $cities = City::all();
+        } else $cities = City::withTrashed()->get()->all();
         return $cities;
     }
 
@@ -70,5 +72,26 @@ class CityController extends BaseApiController
             trans("City.success_delete"),
             201
         );
+    }
+
+    public function forceDelete($id)
+    {
+        $city = City::withTrashed()->findOrFail($id);
+        if ($city->forceDelete()) {
+            return "deleted successfully";
+        } else {
+            return "warning!";
+        }
+    }
+
+    public function restore($id)
+    {
+        $city = City::onlyTrashed()->findOrFail($id);
+        $city->restore();
+        if ($city->restore()){
+            return "restore element successfully";
+        }else{
+            return "warning!";
+        }
     }
 }

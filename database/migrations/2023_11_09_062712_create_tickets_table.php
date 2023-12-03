@@ -11,6 +11,7 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
+            $table->uuid()->unique()->index();
             $table->bigInteger("price");
             $table->integer("time");
             $table->foreignId("user_id")->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();

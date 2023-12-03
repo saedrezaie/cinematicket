@@ -17,7 +17,7 @@ class RoleResource extends JsonResource
         return [
             "id" => $this->resource->id,
             "name" => $this->resource->name,
-            "user info" => $this->whenLoaded("users",
+            "user" => $this->whenLoaded("users",
                 fn() => UserResource::collection($this->resource->users))
         ];
     }

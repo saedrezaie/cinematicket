@@ -14,7 +14,7 @@ class CategoryController extends BaseApiController
 
     public function index()
     {
-        $categories = Category::with(['parent', 'children'])->get();
+        $categories = Category::withTrashed()->with(['parent', 'children'])->get();
         return $this->successResponse(
             CategoryResource::collection($categories),
             trans('Category.index_message'),
@@ -62,5 +62,24 @@ class CategoryController extends BaseApiController
           trans("Category.success_delete"),
           201
         );
+    }
+    public function forceDelete($id)
+    {
+        $category = Category::withTrashed()->findOrFail($id);
+        if ($category->forceDelete()) {
+            return "deleted successfully";
+        } else {
+            return "warning!";
+        }
+    }
+    public function restore($id): string
+    {
+        $category = Category::onlyTrashed()->findOrFail($id);
+        $category->restore();
+        if ($category->restore()) {
+            return "restore element successfully";
+        } else {
+            return "warning!";
+        }
     }
 }

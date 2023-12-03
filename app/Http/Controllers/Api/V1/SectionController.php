@@ -14,7 +14,7 @@ class SectionController extends BaseApiController
 {
     public function index(IndexRequest $request): JsonResponse
     {
-        $section = Section::with(["tickets", "cinema", 'movie'])->get();
+        $section = Section::withTrashed()->with(["tickets", "cinema", 'movie'])->get();
         return $this->successResponse(
             SectionResource::collection($section),
             trans("Section.index_message"),
@@ -60,5 +60,24 @@ class SectionController extends BaseApiController
             trans("Sans.success_delete"),
             201
         );
+    }
+    public function forceDelete($id)
+    {
+        $section = Section::withTrashed()->findOrFail($id);
+        if ($section->forceDelete()) {
+            return "deleted successfully";
+        } else {
+            return "warning!";
+        }
+    }
+    public function restore($id): string
+    {
+        $section = Section::onlyTrashed()->findOrFail($id);
+        $section->restore();
+        if ($section->restore()) {
+            return "restore element successfully";
+        } else {
+            return "warning!";
+        }
     }
 }

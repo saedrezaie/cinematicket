@@ -18,7 +18,7 @@ class RoleController extends BaseApiController
 
     public function index(): JsonResponse
     {
-        $roles = Role::with("users")->get();
+        $roles = Role::withTrashed()->with("users")->get();
         return $this->successResponse(
             RoleResource::collection($roles),
             trans("Role.index_message"),
@@ -67,6 +67,25 @@ class RoleController extends BaseApiController
             trans("Role.success_delete"),
             201
         );
+    }
+    public function forceDelete($id)
+    {
+        $role = Role::withTrashed()->findOrFail($id);
+        if ($role->forceDelete()) {
+            return "deleted successfully";
+        } else {
+            return "warning!";
+        }
+    }
+    public function restore($id): string
+    {
+        $role = Role::onlyTrashed()->findOrFail($id);
+        $role->restore();
+        if ($role->restore()){
+            return "restore element successfully";
+        }else{
+            return "warning!";
+        }
     }
 
     public function RoleToUser(RoleToUserRequest $request): JsonResponse

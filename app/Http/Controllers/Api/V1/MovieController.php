@@ -27,7 +27,7 @@ class MovieController extends BaseApiController
                 ->limit(1)
                 ->get();
         } else
-            $movies = Movie::with(["category", "sections"])->get();
+            $movies = Movie::withTrashed()->with(["category", "sections"])->get();
         return $this->successResponse(
             MovieResource::collection($movies)
         );
@@ -71,5 +71,26 @@ class MovieController extends BaseApiController
             trans("Movie.success_delete"),
             201
         );
+    }
+
+    public function forceDelete($id)
+    {
+        $movie = Movie::withTrashed()->findOrFail($id);
+        if ($movie->forceDelete()) {
+            return "deleted successfully";
+        } else {
+            return "warning!";
+        }
+    }
+
+    public function restore($id): string
+    {
+        $movie = Movie::onlyTrashed()->findOrFail($id);
+        $movie->restore();
+        if ($movie->restore()) {
+            return "restore element successfully";
+        } else {
+            return "warning!";
+        }
     }
 }

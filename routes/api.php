@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\SectionController;
 use App\Http\Controllers\Api\V1\TicketController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\BrandController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,22 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::apiResource('/ticket', TicketController::class);
     Route::apiresource('/user', UserController::class);
     Route::apiResource('/section' , SectionController::class);
+    Route::apiResource('brand', BrandController::class)->withTrashed();
 });
-
-Route::get("user/restore/{user}" , [UserController::class , 'restore'])->withTrashed();
+Route::delete('user/force/{id}',[UserController::class,'forceDelete']);
+Route::get("user/restore/{id}" , [UserController::class , 'restore']);
+Route::delete('brand/force/{id}',[BrandController::class,'forceDelete']);
+Route::delete('city/force/{id}',[CityController::class,'forceDelete']);
+Route::get('city/restore/{id}',[CityController::class,'restore']);
+Route::delete('cinema/force/{id}',[CinemaController::class,'forceDelete']);
+Route::get('cinema/restore/{id}',[CinemaController::class,'restore']);
+Route::delete('movie/force/{id}',[MovieController::class,'forceDelete']);
+Route::get('movie/restore/{iid}',[MovieController::class,'restore']);
+Route::delete('role/force/{id}',[RoleController::class,'forceDelete']);
+Route::get('role/restore/{id}',[RoleController::class,'restore']);
+Route::delete('ticket/force/{id}',[TicketController::class,'forceDelete']);
+Route::get('ticket/restore/{id}',[TicketController::class,'restore']);
+Route::delete('section/force/{id}',[SectionController::class,'forceDelete']);
+Route::get('section/restore/{id}',[SectionController::class,'restore']);
+Route::delete('category/force/{id}',[CategoryController::class,'forceDelete']);
+Route::get('category/restore/{id}',[CategoryController::class,'restore']);

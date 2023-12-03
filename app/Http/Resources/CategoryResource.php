@@ -15,12 +15,12 @@ class CategoryResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->resource->id,
+            'uuid' => $this->resource->uuid,
             'name' => $this->resource->name,
-            'parent info' => $this->whenLoaded("parent",
+            'parent' => $this->whenLoaded("parent",
                 fn() => CategoryResource::collection($this->resource->parent)),
 
-            'children info' => $this->whenLoaded('children',
+            'children' => $this->whenLoaded('children',
                 fn() => CategoryResource::make($this->resource->children)),
         ];
     }

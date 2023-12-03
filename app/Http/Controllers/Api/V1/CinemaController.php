@@ -22,7 +22,7 @@ class CinemaController extends BaseApiController
                 ->limit(1)
                 ->get();
         } else
-            $cinemas = Cinema::with(["city", "sections" , "tickets"])->get();
+            $cinemas = Cinema::withTrashed()->with(["city", "sections"])->get();
         return $this->successResponse(
             CinemaResource::collection($cinemas),
             trans("Cinema.index_message"),
@@ -64,11 +64,32 @@ class CinemaController extends BaseApiController
 
     public function destroy(Cinema $cinema): JsonResponse
     {
-        $destroy = $cinema->delete();
+        $cinema->delete();
         return $this->successResponse(
             "true",
             trans("Cinema.success_delete"),
             201
         );
+    }
+
+    public function forceDelete($id)
+    {
+        $cinema = Cinema::withTrashed()->findOrFail($id);
+        if ($cinema->forceDelete()) {
+            return "deleted successfully";
+        } else {
+            return "warning!";
+        }
+    }
+
+    public function restore($id): string
+    {
+        $cinema = Cinema::onlyTrashed()->findOrFail($id);
+        $cinema->restore();
+        if ($cinema->restore()){
+            return "restore element successfully";
+        }else{
+            return "warning!";
+        }
     }
 }

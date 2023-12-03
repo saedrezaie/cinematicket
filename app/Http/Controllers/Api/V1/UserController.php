@@ -52,14 +52,23 @@ class UserController extends BaseApiController
             201
         );
     }
-
-    public function restore(User $user):JsonResponse
+    public function forceDelete($id)
     {
-       $user->restore();
-       return $this->successResponse(
-           $user,
-           "restored successfully",
-           201
-       );
+        $user = User::withTrashed()->findOrFail($id);
+        if ($user->forceDelete()) {
+            return "deleted successfully";
+        } else {
+            return "warning!";
+        }
+    }
+    public function restore($id): string
+    {
+        $user = User::onlyTrashed()->findOrFail($id);
+        $user->restore();
+        if ($user->restore()){
+            return "restore element successfully";
+        }else{
+            return "warning!";
+        }
     }
 }

@@ -15,10 +15,10 @@ class UserResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=> $this->resource->id,
+            'uuid'=> $this->resource->uuid,
             'name'=> $this->resource->name,
-            'phone'=> $this->resource->phone,
-            'role info'=> $this->whenLoaded('roles',
+            'number'=> $this->resource->number,
+            'role'=> $this->whenLoaded('roles',
                 fn()=> RoleUserResource::collection($this->resource->roles)),
         ];
     }

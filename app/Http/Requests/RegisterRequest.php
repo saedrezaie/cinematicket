@@ -17,9 +17,10 @@ class RegisterRequest extends FormRequest
         return [
             "name" => ["required", "string", "min:3", "max:255"],
             "family" => ["required" , "string", "min:4", "max:255"],
-            "phone" => ["required", "integer", "starts_with:+98"],
+            "number" => ["required", "integer", "starts_with:+98"],
             "email" => ["required", "email"],
-            "password" => ["required", "min:8"]
+            "password" => ["required", "string", "min:8", "confirmed"],
+            "password_confirmation" => ["required", "string", "min:8"]
         ];
     }
 }

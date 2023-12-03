@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,8 +15,10 @@ class Cinema extends Model
 {
     use SoftDeletes;
     use HasFactory;
+    use HasUuid;
 
     protected $fillable = [
+        "uuid",
         "name",
         "phone",
         "address",
@@ -30,7 +33,7 @@ class Cinema extends Model
 
     public function sections():HasMany
     {
-        return $this->HasMany(Section::class)->with("ticket");
+        return $this->HasMany(Section::class)->with("tickets");
     }
 
     public function tickets():HasManyThrough

@@ -15,15 +15,15 @@ class TicketResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id" => $this->resource->id,
+            "uuid" => $this->resource->uuid,
             "price" => $this->resource->price,
             "time" => $this->resource->time,
             "salon" => $this->resource->salon,
 
-            "user info" => $this->whenLoaded("user" ,
+            "user" => $this->whenLoaded("user" ,
             fn()=> UserResource::make($this->resource->user)),
 
-            "section info" => $this->whenLoaded("section" ,
+            "section" => $this->whenLoaded("section" ,
             fn()=> SectionResource::make($this->resource->section))
         ];
     }

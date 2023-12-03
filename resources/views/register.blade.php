@@ -17,7 +17,7 @@
             width: 50%;
             margin: auto;
         }
-        input[type=text], input[type=tel], input[type=email], input[type=password] {
+        input[type=text], input[type=tel], input[type=email], input[type=password], input[type=password] {
             width: 100%;
             padding: 12px 20px;
             margin: 8px 0;
@@ -95,10 +95,10 @@
                 <p style="color: #f44336">{{$message}}</p>
             @enderror
         </label>
-        <label for="phone"><b>Phone Number</b></label>
+        <label for="number"><b>Phone Number</b></label>
         <label>
-            <input type="tel" placeholder="Enter Phone Number" name="phone">
-            @error("phone")
+            <input type="tel" placeholder="Enter Phone Number" name="number">
+            @error("number")
             <p style="color: #f44336">{{$message}}</p>
             @enderror
         </label>
@@ -109,10 +109,17 @@
             <p style="color: #f44336">{{$message}}</p>
             @enderror
         </label>
-        <label for="password"><b>password</b></label>
+        <label for="password"><b>Password</b></label>
         <label>
             <input type="password" placeholder="Enter Password" name="password">
             @error("password")
+            <p style="color: #f44336">{{$message}}</p>
+            @enderror
+        </label>
+        <label for="password_confirmation">Confirm Password</label>
+        <label>
+            <input type="password" placeholder="Repeat Your Password" name="password_confirmation">
+            @error("password_confirmation")
             <p style="color: #f44336">{{$message}}</p>
             @enderror
         </label>

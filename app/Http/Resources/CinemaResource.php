@@ -15,7 +15,7 @@ class CinemaResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id" => $this->resource->id,
+            "uuid" => $this->resource->uuid,
             "name" => $this->resource->name,
             "capacity" => $this->resource->capacity,
             "address" => $this->resource->address,
@@ -25,8 +25,7 @@ class CinemaResource extends JsonResource
             "sections" => $this->whenLoaded("sections",
             fn()=> SectionResource::collection($this->resource->sections)),
 
-            "ticket" => $this->whenCounted("tickets",
-            fn()=> TicketResource::collection($this->resource->tickets))
+            'ticket_max' => $this->whenCounted('tickets'),
         ];
     }
 }

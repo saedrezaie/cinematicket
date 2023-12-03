@@ -45,6 +45,6 @@ class AuthController extends BaseApiController
             return response()->json([
                 'message' => 'Successfully logged out',
             ]);
-        }else return "warning!";
+        } else return "warning!";
     }
 }
